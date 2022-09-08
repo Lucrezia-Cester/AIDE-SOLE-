@@ -1,14 +1,41 @@
 import json
-import requests
-from requests.auth import HTTPBasicAuth
-
 
 #connect to kibana
-username = 'elastic'
-password = 'elastic'
+import requests
+from requests.auth import HTTPBasicAuth
+from pprint import pprint
 
-response = requests.post(url="https://aide.gstt.nhs.uk:5601", auth = HTTPBasicAuth(username, password))
-tk = json.loads(r.text)['token']
+username = 'field'
+password = 'field'
+
+response = requests.get('http://preprod-kch-aide.answerdigital.io:5601/', auth = HTTPBasicAuth(username, password))
+
+pprint(response.content)
+
+
+
+
+#cquery logs real time
+
+HEADERS = {
+    'Content-Type': 'application/json'
+}
+
+uri = "http://preprod-kch-aide.answerdigital.io:5601/"+"/_search"
+
+query = {
+      "json.correlation_id": "1.2.826.0.1.2112370.55.1.12527038"
+    }
+
+
+r = requests.get(uri,auth = HTTPBasicAuth(username, password),headers=HEADERS, data=query).json()
+print(r)
+
+
+
+
+# print request object
+
 
 
 
@@ -458,9 +485,9 @@ json_file = '''
 
 #find event message
 data = json.loads(json_file)
-print((data['_source']['json']['msg']))
+#print((data['_source']['json']['msg']))
 
 #send event message to https site
 payload = {"message": data['_source']['json']['msg']}
 r = requests.post(url="https://httpbin.org/post", data=json.dumps(payload))
-print(r.text)
+#print(r.text)
