@@ -5,27 +5,33 @@ import requests
 from requests.auth import HTTPBasicAuth
 from pprint import pprint
 
-username = 'field'
-password = 'field'
+username = 'user'
+password = 'p'
 
-response = requests.get('http://preprod-kch-aide.answerdigital.io:5601/', auth = HTTPBasicAuth(username, password))
+response = requests.get('http://', auth = HTTPBasicAuth(username, password))
 
 pprint(response.content)
 
-
-
-
+#Query EVENT messages by study uid
 #cquery logs real time
 
 HEADERS = {
     'Content-Type': 'application/json'
 }
 
-uri = "http://preprod-kch-aide.answerdigital.io:5601/"+"/_search"
+from os import environ
 
-query = {
-      "json.correlation_id": "1.2.826.0.1.2112370.55.1.12527038"
-    }
+SERVER_IP = environ.get("SERVER_IP")
+
+uri = "http://"+ SERVER_IP + "logstash*/_search"
+
+query = json.dumps({
+{
+  "query": {
+    "json.correlation_id": "1.2.826.0.1.2112370.55.1.12527038"
+  }
+})
+
 
 
 r = requests.get(uri,auth = HTTPBasicAuth(username, password),headers=HEADERS, data=query).json()
